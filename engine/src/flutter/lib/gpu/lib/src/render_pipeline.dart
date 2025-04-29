@@ -14,6 +14,7 @@ base class RenderPipeline extends NativeFieldWrapperClass1 {
     Shader fragmentShader,
   ) : vertexShader = vertexShader,
       fragmentShader = fragmentShader {
+    print('_initialize called');
     String? error = _initialize(gpuContext, vertexShader, fragmentShader);
     if (error != null) {
       throw Exception(error);

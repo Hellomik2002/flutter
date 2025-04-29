@@ -23,15 +23,15 @@ namespace gpu {
 
 IMPLEMENT_WRAPPERTYPEINFO(flutter_gpu, ShaderLibrary);
 
-fml::RefPtr<ShaderLibrary> ShaderLibrary::override_shader_library_;
+// fml::RefPtr<ShaderLibrary> ShaderLibrary::override_shader_library_;
 
 fml::RefPtr<ShaderLibrary> ShaderLibrary::MakeFromAsset(
     impeller::Context::BackendType backend_type,
     const std::string& name,
     std::string& out_error) {
-  if (override_shader_library_) {
-    return override_shader_library_;
-  }
+  // if (override_shader_library_) {
+  //   return override_shader_library_;
+  // }
 
   auto dart_state = UIDartState::Current();
   std::shared_ptr<AssetManager> asset_manager =
@@ -190,6 +190,7 @@ fml::RefPtr<ShaderLibrary> ShaderLibrary::MakeFromFlatbuffer(
   for (const auto* bundled_shader : *bundle->shaders()) {
     const impeller::fb::shaderbundle::BackendShader* backend_shader =
         GetShaderBackend(backend_type, bundled_shader);
+
     if (!backend_shader) {
       VALIDATION_LOG << "Failed to unpack shader \""
                      << bundled_shader->name()->c_str() << "\" from bundle.";
@@ -310,6 +311,7 @@ fml::RefPtr<ShaderLibrary> ShaderLibrary::MakeFromFlatbuffer(
         ToShaderStage(backend_shader->stage()), std::move(code_mapping),
         std::move(inputs), std::move(layouts), std::move(uniform_structs),
         std::move(uniform_textures), std::move(descriptor_set_layouts));
+
     shader_map[bundled_shader->name()->str()] = std::move(shader);
   }
 
@@ -319,7 +321,8 @@ fml::RefPtr<ShaderLibrary> ShaderLibrary::MakeFromFlatbuffer(
 
 void ShaderLibrary::SetOverride(
     fml::RefPtr<ShaderLibrary> override_shader_library) {
-  override_shader_library_ = std::move(override_shader_library);
+  std::cout << "SetOverride\n";
+  // override_shader_library_ = std::move(override_shader_library);
 }
 
 fml::RefPtr<Shader> ShaderLibrary::GetShader(const std::string& shader_name,
@@ -380,6 +383,7 @@ Dart_Handle InternalFlutterGpu_ShaderLibrary_GetShader(
   FML_DCHECK(Dart_IsString(shader_name));
   auto shader =
       wrapper->GetShader(tonic::StdStringFromDart(shader_name), shader_wrapper);
+  std::cout << shader.get() << " SHADER ADDRESS \n ";
   if (!shader) {
     return Dart_Null();
   }
@@ -390,23 +394,16 @@ Dart_Handle InternalFlutterGpu_ShaderLibrary_InitializeWithBytes(
     Dart_Handle wrapper,
     uint32_t bufferLength,
     uint8_t* buffer) {
-  // GETTING IMPELLER CONTEXT
   std::optional<std::string> out_error;
   auto impeller_context = flutter::gpu::Context::GetDefaultContext(out_error);
   if (out_error.has_value()) {
     return tonic::ToDart(out_error.value());
   }
-  auto mapping = std::make_unique<fml::MallocMapping>(
-      fml::MallocMapping::Copy(buffer, bufferLength));
+
+  auto mapping = std::make_unique<fml::NonOwnedMapping>(buffer, bufferLength);
 
   auto shader_library = flutter::gpu::ShaderLibrary::MakeFromFlatbuffer(
       impeller_context->GetBackendType(), std::move(mapping));
-
-  // Dart_TypedDataReleaseData(bytes);
-
-  if (!shader_library) {
-    return tonic::ToDart("Failed to create ShaderLibrary from bytes.");
-  }
 
   shader_library->AssociateWithDartWrapper(wrapper);
   return Dart_Null();

@@ -222,10 +222,10 @@ struct Settings {
 #endif                              // FML_OS_IOS && !FML_OS_IOS_SIMULATOR
       bool enable_impeller = true;  // NOLINT(readability-identifier-naming)
 #else
-  bool enable_impeller = false;
+  bool enable_impeller = true;
 #endif
 
-  bool enable_flutter_gpu = false;
+  bool enable_flutter_gpu = true;
 
   // Enable android surface control swapchains where supported.
   bool enable_surface_control = false;

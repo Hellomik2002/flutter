@@ -81,6 +81,7 @@ class Shader : public RefCountedDartWrappable<Shader> {
   std::unordered_map<std::string, UniformBinding> uniform_structs_;
   std::unordered_map<std::string, TextureBinding> uniform_textures_;
   std::vector<impeller::DescriptorSetLayout> descriptor_set_layouts_;
+  bool isFirstTime;
 
   FML_DISALLOW_COPY_AND_ASSIGN(Shader);
 };

@@ -48,7 +48,7 @@ class ShaderLibrary : public RefCountedDartWrappable<ShaderLibrary> {
   /// A global override used to inject a ShaderLibrary when running with the
   /// Impeller playground. When set, `MakeFromAsset` will always just return
   /// this library.
-  static fml::RefPtr<ShaderLibrary> override_shader_library_;
+//   static fml::RefPtr<ShaderLibrary> override_shader_library_;
 
   std::shared_ptr<fml::Mapping> payload_;
   ShaderMap shaders_;

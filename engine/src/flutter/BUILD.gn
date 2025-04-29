@@ -78,6 +78,8 @@ group("flutter") {
     ":unittests",
     "//flutter/shell/platform/embedder:flutter_engine",
     "//flutter/sky",
+    "//flutter/impeller/compiler:impeller_ulan",
+    "//flutter/impeller/compiler:ulan_launcher",
   ]
 
   # Ensure the example for a sample embedder compiles.
@@ -109,6 +111,8 @@ group("flutter") {
         # Impeller artifacts - compiler and libtessellator
         "//flutter/impeller/compiler:impellerc",
         "//flutter/impeller/tessellator:tessellator_shared",
+        "//flutter/impeller/compiler:impeller_ulan",
+        "//flutter/impeller/compiler:ulan_launcher",
 
         # path_ops
         "//flutter/tools/path_ops",

@@ -4853,7 +4853,7 @@ TEST_F(ShellTest, IgnoresBadAddViewsBeforeLaunchingIsolate) {
 TEST_F(ShellTest, RuntimeStageBackendDefaultsToSkSLWithoutImpeller) {
   ASSERT_FALSE(DartVMRef::IsInstanceRunning());
   Settings settings = CreateSettingsForFixture();
-  settings.enable_impeller = false;
+  settings.enable_impeller = true;
   ThreadHost thread_host(ThreadHost::ThreadHostConfig(
       "io.flutter.test." + GetCurrentTestName() + ".",
       ThreadHost::Type::kPlatform | ThreadHost::Type::kRaster |
@@ -4944,7 +4944,7 @@ TEST_F(ShellTest, WillLogWarningWhenImpellerIsOptedOut) {
 #endif
   ASSERT_FALSE(DartVMRef::IsInstanceRunning());
   Settings settings = CreateSettingsForFixture();
-  settings.enable_impeller = false;
+  settings.enable_impeller = true;
   settings.warn_on_impeller_opt_out = true;
   // Log captures are thread specific. Just put the shell in single threaded
   // configuration.

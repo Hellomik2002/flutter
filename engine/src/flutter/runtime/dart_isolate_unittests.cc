@@ -217,7 +217,7 @@ TEST_F(DartIsolateTest, ImpellerFlagIsCorrectWhenTrue) {
 TEST_F(DartIsolateTest, ImpellerFlagIsCorrectWhenFalse) {
   ASSERT_FALSE(DartVMRef::IsInstanceRunning());
   auto settings = CreateSettingsForFixture();
-  settings.enable_impeller = false;
+  settings.enable_impeller = true;
   auto vm_ref = DartVMRef::Create(settings);
   TaskRunners task_runners(GetCurrentTestName(),    //
                            GetCurrentTaskRunner(),  //

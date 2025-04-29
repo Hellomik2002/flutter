@@ -4,6 +4,7 @@
 
 #include "flutter/lib/gpu/shader.h"
 
+#include <iostream>
 #include <utility>
 
 #include "flutter/lib/gpu/formats.h"
@@ -34,6 +35,7 @@ IMPLEMENT_WRAPPERTYPEINFO(flutter_gpu, Shader);
 Shader::Shader() = default;
 
 Shader::~Shader() = default;
+bool isFirstTime;
 
 fml::RefPtr<Shader> Shader::Make(
     std::string entrypoint,
@@ -53,6 +55,7 @@ fml::RefPtr<Shader> Shader::Make(
   shader->uniform_structs_ = std::move(uniform_structs);
   shader->uniform_textures_ = std::move(uniform_textures);
   shader->descriptor_set_layouts_ = std::move(descriptor_set_layouts);
+  shader->isFirstTime = true;
   return shader;
 }
 
@@ -67,21 +70,30 @@ bool Shader::IsRegistered(Context& context) {
 }
 
 bool Shader::RegisterSync(Context& context) {
-  if (IsRegistered(context)) {
-    return true;  // Already registered.
-  }
+  if (isFirstTime) {
+    if (IsRegistered(context)) {
+      std::cout << "UNRegisterFunction STARED";
+      auto& lib = *context.GetContext()->GetShaderLibrary();
+      lib.UnregisterFunction(entrypoint_, stage_);
+    }
 
-  auto& lib = *context.GetContext()->GetShaderLibrary();
+    std::cout << "NOO REGISTERED\n";
 
-  std::promise<bool> promise;
-  auto future = promise.get_future();
-  lib.RegisterFunction(
-      entrypoint_, stage_, code_mapping_,
-      fml::MakeCopyable([promise = std::move(promise)](bool result) mutable {
-        promise.set_value(result);
-      }));
-  if (!future.get()) {
-    return false;  // Registration failed.
+    auto& lib = *context.GetContext()->GetShaderLibrary();
+
+    std::promise<bool> promise;
+    auto future = promise.get_future();
+    std::cout << "RegisterFunction STARED";
+    lib.RegisterFunction(
+        entrypoint_, stage_, code_mapping_,
+        fml::MakeCopyable([promise = std::move(promise)](bool result) mutable {
+          promise.set_value(result);
+        }));
+    if (!future.get()) {
+      return false;  // Registration failed.
+    }
+    isFirstTime = false;
+    return true;
   }
   return true;
 }

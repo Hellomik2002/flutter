@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include "flutter/lib/gpu/render_pipeline.h"
-
+#include <iostream>
 #include "flutter/lib/gpu/shader.h"
 #include "impeller/renderer/pipeline_descriptor.h"
 
@@ -48,13 +48,16 @@ Dart_Handle InternalFlutterGpu_RenderPipeline_Initialize(
     flutter::gpu::Context* gpu_context,
     flutter::gpu::Shader* vertex_shader,
     flutter::gpu::Shader* fragment_shader) {
-  // Lazily register the shaders synchronously if they haven't been already.
+  std::cout << "InternalFlutterGpu_RenderPipeline_Initialize\n";
+  // Lazily register the shaders synchronously if they haven't been
+  // already.
   vertex_shader->RegisterSync(*gpu_context);
   fragment_shader->RegisterSync(*gpu_context);
 
   auto res = fml::MakeRefCounted<flutter::gpu::RenderPipeline>(
       fml::RefPtr<flutter::gpu::Shader>(vertex_shader),  //
       fml::RefPtr<flutter::gpu::Shader>(fragment_shader));
+  std::cout << "InternalFlutterGpu_RenderPipeline_Initialize\n";
   res->AssociateWithDartWrapper(wrapper);
 
   return Dart_Null();

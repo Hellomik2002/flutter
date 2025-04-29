@@ -46,6 +46,8 @@ impeller_component("compiler_lib") {
     "reflector.h",
     "runtime_stage_data.cc",
     "runtime_stage_data.h",
+    "mobile/shader_bundle_mobile.cc",
+    "mobile/shader_bundle_mobile.h",
     "shader_bundle.cc",
     "shader_bundle.h",
     "shader_bundle_data.cc",
@@ -58,6 +60,10 @@ impeller_component("compiler_lib") {
     "spirv_sksl.h",
     "switches.cc",
     "switches.h",
+    "mobile/switches_mobile.cc",
+    "mobile/switches_mobile.h",
+    "mobile/source_options_mobile.cc",
+    "mobile/source_options_mobile.h",
     "types.cc",
     "types.h",
     "uniform_sorter.cc",
@@ -89,6 +95,39 @@ impeller_component("impellerc") {
     "shader_lib",
   ]
 
+  metadata = {
+    entitlement_file_path = [ "impellerc" ]
+  }
+}
+
+impeller_component("impeller_ulan") {
+  target_type = "shared_library"
+  output_name = "impeller_ulan"
+  
+  cflags_cc = [ "-fexceptions" ]
+  
+  sources = [ "mobile/impellerc_mobile.cc", "mobile/impellerc_mobile.h" ]
+
+  deps = [
+    ":compiler_lib",
+    "shader_lib",
+  ]
+  
+  metadata = {
+    entitlement_file_path = [ "impellerc" ]
+  }
+}
+
+impeller_component("ulan_launcher") {
+  target_type = "executable"
+
+  sources = [ "launcher.cc" ]
+
+  deps = [
+      ":impeller_ulan",
+      ":compiler_lib",
+      "shader_lib",
+  ]
   metadata = {
     entitlement_file_path = [ "impellerc" ]
   }

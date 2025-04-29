@@ -118,8 +118,9 @@ bool RuntimeEffectContents::RegisterShader(
   //--------------------------------------------------------------------------
   /// Resolve runtime stage function.
   ///
-
+  std::cout << "THIS SHIT\n";
   if (function && runtime_stage_->IsDirty()) {
+    std::cout << "THIS SHIT1\n";
     renderer.ClearCachedRuntimeEffectPipeline(runtime_stage_->GetEntrypoint());
     context->GetPipelineLibrary()->RemovePipelinesWithEntryPoint(function);
     library->UnregisterFunction(runtime_stage_->GetEntrypoint(),
@@ -131,7 +132,7 @@ bool RuntimeEffectContents::RegisterShader(
   if (!function) {
     std::promise<bool> promise;
     auto future = promise.get_future();
-
+    std::cout << "THIS SHIT2\n";
     library->RegisterFunction(
         runtime_stage_->GetEntrypoint(),
         ToShaderStage(runtime_stage_->GetShaderStage()),

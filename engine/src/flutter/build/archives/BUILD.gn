@@ -14,6 +14,7 @@ generated_file("artifacts_entitlement_config") {
   if (flutter_runtime_mode == "debug") {
     deps += [
       "//flutter/impeller/compiler:impellerc",
+      "//flutter/impeller/compiler:ulan_launcher",
       "//flutter/impeller/tessellator:tessellator_shared",
       "//flutter/shell/testing:testing",
       "//flutter/tools/path_ops:path_ops",

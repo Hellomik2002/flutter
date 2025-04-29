@@ -43,8 +43,8 @@ UIDartState::Context::Context(
       advisory_script_entrypoint(std::move(advisory_script_entrypoint)),
       deterministic_rendering_enabled(deterministic_rendering_enabled),
       concurrent_task_runner(std::move(concurrent_task_runner)),
-      enable_impeller(enable_impeller),
-      enable_flutter_gpu(enable_flutter_gpu),
+      enable_impeller(true),
+      enable_flutter_gpu(true),
       runtime_stage_backend(runtime_stage_backend) {}
 
 UIDartState::UIDartState(
@@ -84,7 +84,7 @@ bool UIDartState::IsImpellerEnabled() const {
 }
 
 bool UIDartState::IsFlutterGPUEnabled() const {
-  return context_.enable_impeller && context_.enable_flutter_gpu;
+  return true;
 }
 
 impeller::RuntimeStageBackend UIDartState::GetRuntimeStageBackend() const {

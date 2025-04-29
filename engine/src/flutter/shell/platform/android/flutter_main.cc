@@ -133,7 +133,7 @@ void FlutterMain::Init(JNIEnv* env,
   switch (android_rendering_api) {
     case AndroidRenderingAPI::kSoftware:
     case AndroidRenderingAPI::kSkiaOpenGLES:
-      settings.enable_impeller = false;
+      settings.enable_impeller = true;
       break;
     case AndroidRenderingAPI::kImpellerOpenGLES:
     case AndroidRenderingAPI::kImpellerVulkan:
